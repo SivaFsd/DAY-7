@@ -1,0 +1,129 @@
+1]
+const CONTINENT_MAP = [
+  {
+    continent: 'Oceania',
+    countries: ['Australia', 'Fiji'],
+  },
+  {
+    continent: 'Europe',
+    countries: [
+      'Anguilla',
+      'Aruba',
+      'Austria',
+      'Azerbaijan',
+      'Belgium',
+      'Bulgaria',
+      'Croatia',
+      'Curacao',
+      'Cyprus',
+      'Denmark',
+      'Finland',
+      'France',
+      'Georgia',
+      'Germany',
+      'Greece',
+      'Italy',
+      'Luxembourg',
+      'Malta',
+      'Monaco',
+      'Netherlands',
+      'Netherlands Antilles',
+      'Norway',
+      'Poland',
+      'Portugal',
+      'Romania',
+      'Spain',
+      'Sweden',
+      'Switzerland',
+      'Ukraine',
+      'United Kingdom',
+    ],
+  },
+  {
+    continent: 'Asia',
+    countries: [
+      'Bahrain',
+      'China',
+      'East Timor',
+      'India',
+      'Indonesia',
+      'Iran',
+      'Iraq',
+      'Israel',
+      'Japan',
+      'Jordan',
+      'Kazakhstan',
+      'Myanmar',
+      'North Korea',
+      'South Korea',
+      'Kuwait',
+      'Kyrgyzstan',
+      'Laos',
+      'Malaysia',
+      'Oman',
+      'Pakistan',
+      'Qatar',
+      'Russian Federation',
+      'Saudi Arabia',
+      'Singapore',
+      'Taiwan',
+      'Thailand',
+      'Turkey',
+      'Turkmenistan',
+      'United Arab Emirates',
+      'Uzbekistan',
+      'Vietnam',
+      'Yemen',
+    ],
+  }
+];
+
+const countriesToContinent = CONTINENT_MAP.reduce((acc, { continent, countries }) => {
+  countries.forEach(country => acc[country.toLocaleLowerCase()] = continent);
+  return acc;
+}, {});
+
+const dataset = [{country: 'Vietnam', color: 'blue'}, {country: 'Austria', color: 'red'}];
+
+const result = dataset.map(({ country, color }) => ({
+    continent: countriesToContinent[country.toLocaleLowerCase()],
+    country,
+}));
+
+console.log(result)
+
+2]
+const countriesList = document.getElementById("countries");
+let countries; // will contain "fetched" data
+countriesList.addEventListener("change", newCountrySelection);
+
+function newCountrySelection(event) {
+  displayCountryInfo(event.target.value);
+}
+});
+
+fetch("https://restcountries.eu/rest/v2/name/china")
+.then(res => res.json())
+.then(data => initialize(data))
+.catch(err => console.log("Error:", err));
+
+function initialize(countriesData) {
+  countries = countriesData;
+  let options = "";
+  }
+  countries.forEach(country => options+=`<option value="${country.alpha3Code}">${country.name}</option>`);
+  countriesList.innerHTML = options;
+  countriesList.selectedIndex = Math.floor(Math.random()*countriesList.length);
+  displayCountryInfo(countriesList[countriesList.selectedIndex].value);
+}
+
+function displayCountryInfo(countryByAlpha3Code) {
+  const countryData = countries.find(country => country.alpha3Code === countryByAlpha3Code);
+  document.querySelector("#flag-container img").src = countryData.flag;
+  document.querySelector("#flag-container img").alt = `Flag of ${countryData.name}`;  
+  document.getElementById("capital").innerHTML = countryData.capital;
+  document.getElementById("dialing-code").innerHTML = `+${countryData.callingCodes[0]}`;
+  document.getElementById("population").innerHTML = countryData.population.toLocaleString("en-US");
+  document.getElementById("currencies").innerHTML = countryData.currencies.filter(c => c.name).map(c => `${c.name} (${c.code})`).join(", ");
+  document.getElementById("region").innerHTML = countryData.region;
+}
